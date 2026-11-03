@@ -1,4 +1,6 @@
 .env
+!.env.example
 *.qcow2
 *.iso
-
+id_*
+!id_*.pub
