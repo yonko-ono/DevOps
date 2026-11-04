@@ -1,0 +1,29 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-server
+    environment:
+      MYSQL_ROOT_PASSWORD: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: ${DB_NAME:?must be set}
+      MYSQL_USER: ${DB_USER:?must be set}
+      MYSQL_PASSWORD: /run/secrets/mysql_user_password
+    secrets:
+      - mysql_user_password
+      - mysql_root_password
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - db-network
+volumes:
+  mysql_data:
+networks:
+  db-network:
+    driver: bridge
+secrets:
+  mysql_user_password:
+    file: ./secrets/mysql_user_password
+  mysql_root_password:
+    file: ./secrets/mysql_root_password

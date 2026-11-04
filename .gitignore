@@ -4,3 +4,4 @@
 *.iso
 id_*
 !id_*.pub
+secrets/
