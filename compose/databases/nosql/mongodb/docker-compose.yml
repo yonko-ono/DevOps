@@ -1,0 +1,17 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${BIND_PORT:-27017}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_ROOT_USER:? must be set}
+      MONGO_INITDB_ROOT_PASSWORD: /run/secrets/mongodb_root_password
+    secrets:
+      - mongodb_root_password
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
