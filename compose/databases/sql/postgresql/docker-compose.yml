@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-server
+    environment:
+      POSTGRES_DB: ${DB_NAME:? must be set}
+      POSTGRES_USER: ${DB_USER:? must be set}
+      POSTGRES_PASSWORD: /run/secrets/postgres_user_password
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - db-network
+
+volumes:
+  postgres_data:
+
+networks:
+  db-network:
+    driver: bridge
